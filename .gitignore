@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/oomalloc
+oomalloc.so
+oomalloc.dylib
+oomalloc.dll
+oomalloc.a
+oomalloc.lib
+oomalloc-test-*
+*.exe
+*.o
+*.obj
+*.lst

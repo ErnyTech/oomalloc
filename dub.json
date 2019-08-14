@@ -1,0 +1,21 @@
+{
+	"name": "oomalloc",
+	"description": "A malloc based OOM Killer",
+	"copyright": "Copyright © 2019, Ernesto Castellotti",
+	"license": "MPL-2.0",
+	"authors": [
+		"Ernesto Castellotti"
+	],
+	"targetType": "dynamicLibrary",
+	"libs": [
+		"dl",
+		"bsd",
+		"stdc++"
+	],
+	"buildOptions": [
+		"betterC"
+	],
+	"dflags": [
+		"-fPIC"
+	]
+}
