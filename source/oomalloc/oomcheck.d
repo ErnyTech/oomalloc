@@ -7,6 +7,7 @@
  */
  
 module oomalloc.oomcheck;
+import oomalloc.config;
 
 struct MemInfo {
     size_t memTotal;
@@ -15,10 +16,10 @@ struct MemInfo {
     size_t swapFree;
 }
 
-void checkOom() {
+bool checkOom(size_t sizeToAlloc) {
     import oomalloc.util : write;
 
-    auto memInfo = getMemInfo();
+    immutable memInfo = getMemInfo();
 
     debug {
         write("Mem total: ");
@@ -37,7 +38,37 @@ void checkOom() {
         write(memInfo.swapFree);
         write("\n");
     }
-    
+
+    immutable memAvailablePercent = (memInfo.memAvailable * 100) / memInfo.memTotal;
+    immutable swapFreePercent = (memInfo.swapFree * 100) / memInfo.swapTotal;
+
+    static if (OOM_KILLER_MODE == KillerMode.KILL_AFTER_OOM) {
+        immutable isOom = (memAvailablePercent <= KILL_PERCENT || swapFreePercent <= SWAP_KILL_PERCENT);
+    }
+
+    static if (OOM_KILLER_MODE == KillerMode.KILL_PREVENT_OOM || OOM_KILLER_MODE == KillerMode.RETURNULL_PREVENT_OOM) {
+        immutable minMem = (KILL_PERCENT * memInfo.memTotal) / 100;
+        immutable newMemAvailable = memInfo.memAvailable - (sizeToAlloc / 1024);
+        immutable isOom = (newMemAvailable <= minMem);
+
+        debug {
+            write("Min available: ");
+            write(minMem);
+            write("\n");
+            
+            write("New available mem (after allocation): ");
+            write(newMemAvailable);
+            write("\n");
+        }
+    }
+
+    debug {
+        if (isOom) {
+            write("OOM detected!\n");
+        }
+    }
+
+    return isOom;
 }
 
 MemInfo getMemInfo() {

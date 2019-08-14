@@ -8,8 +8,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 int main() {
     void* ptr = malloc(10);
-    printf("ok\n");
+
+    if (!ptr) {
+        printf("Allocation failed\n");
+    } else {
+        printf("Allocation success\n");
+    }
 }
