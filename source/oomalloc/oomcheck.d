@@ -68,7 +68,12 @@ bool checkOom(size_t sizeToAlloc) {
         }
     }
 
-    return isOom;
+    static if (FORCE_FAKE_OOM) {
+        write("This is fake OOM\n");
+        return true;
+    } else {
+        return isOom;
+    }
 }
 
 MemInfo getMemInfo() {

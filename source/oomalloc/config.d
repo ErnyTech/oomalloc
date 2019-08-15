@@ -7,11 +7,13 @@
  */
  
 module oomalloc.config;
+import core.sys.posix.signal;
 
 // This is the oomalloc configuration:
 enum KILL_PERCENT = 5;
 enum SWAP_KILL_PERCENT = 5;
-enum OOM_KILLER_MODE = KillerMode.RETURNULL_PREVENT_OOM;
+enum OOM_KILLER_MODE = KillerMode.KILL_PREVENT_OOM;
+enum KILL_SIG = SIGTERM;
 enum PRINT_OOM_ERROR = false;
 enum FORCE_FAKE_OOM = false; // Only for test
 

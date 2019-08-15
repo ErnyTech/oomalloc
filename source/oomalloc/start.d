@@ -9,10 +9,12 @@
 module oomalloc.start;
 
 import oomalloc.config;
+import oomalloc.kill;
 import oomalloc.oomcheck;
 
 bool start(size_t size) {
     import oomalloc.util : write;
+    import core.sys.posix.unistd : getpid;
 
     static if (DEBUG) {
         write("Allocation size: ");
@@ -31,8 +33,10 @@ bool start(size_t size) {
             static if (DEBUG || PRINT_OOM_ERROR) {
                 write("OOM Killer mode: KILL_PREVENT_OOM\n");
                 write("Memory allocation will be suppressed\n");
-                write("\n");
             }
+
+            auto thisPid = getpid();
+            killProcess(thisPid);
 
             return false;
         }
@@ -41,7 +45,6 @@ bool start(size_t size) {
             static if (DEBUG || PRINT_OOM_ERROR) {
                 write("OOM Killer mode: RETURNULL_PREVENT_OOM\n");
                 write("Memory allocation will be suppressed\n");
-                write("\n");
             }
 
             return false;

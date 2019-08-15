@@ -91,3 +91,17 @@ void panic(bool value, string msg, int errorCode = 1) {
         panic(msg, errorCode);
     }
 }
+
+void warn(string msg, int errorCode = 1) {
+    write("warning: ");
+    write(msg);
+    write(", error code: ");
+    write(errorCode);
+    write("\n");
+}
+
+void warn(bool value, string msg, int errorCode = 1) {
+    if (!value) {
+        warn(msg, errorCode);
+    }
+}
