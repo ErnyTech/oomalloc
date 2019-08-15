@@ -19,6 +19,10 @@ struct MemInfo {
 bool checkOom(size_t sizeToAlloc) {
     import oomalloc.util : write;
 
+    if (sizeToAlloc == 0) {
+        return false;
+    }
+
     immutable memInfo = getMemInfo();
 
     static if (DEBUG) {
@@ -40,10 +44,22 @@ bool checkOom(size_t sizeToAlloc) {
     }
 
     immutable memAvailablePercent = (memInfo.memAvailable * 100) / memInfo.memTotal;
-    immutable swapFreePercent = (memInfo.swapFree * 100) / memInfo.swapTotal;
+    size_t swapFreePercent; = (memInfo.swapFree * 100) / memInfo.swapTotal;
+    
+    if (memInfo.swapTotal == 0) {
+        swapFreePercent = 0;
+    } else {
+        swapFreePercent = (memInfo.swapFree * 100) / memInfo.swapTotal;
+    }
 
     static if (OOM_KILLER_MODE == KillerMode.KILL_AFTER_OOM) {
-        immutable isOom = (memAvailablePercent <= KILL_PERCENT || swapFreePercent <= SWAP_KILL_PERCENT);
+        bool isOom;
+        
+        if (memInfo.swapTotal == 0) {
+            isOom = memAvailablePercent <= KILL_PERCENT;
+        } else {
+            isOom = (memAvailablePercent <= KILL_PERCENT || swapFreePercent <= SWAP_KILL_PERCENT);
+        }
     }
 
     static if (OOM_KILLER_MODE == KillerMode.KILL_PREVENT_OOM || OOM_KILLER_MODE == KillerMode.RETURNULL_PREVENT_OOM) {
