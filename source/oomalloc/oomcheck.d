@@ -63,7 +63,7 @@ bool checkOom(size_t sizeToAlloc) {
     }
 
     static if (DEBUG || PRINT_OOM_ERROR) {
-        if (isOom) {
+        if (isOom || FORCE_FAKE_OOM) {
             write("OOM detected!\n");
         }
     }
