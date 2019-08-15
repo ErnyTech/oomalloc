@@ -44,7 +44,7 @@ bool checkOom(size_t sizeToAlloc) {
     }
 
     immutable memAvailablePercent = (memInfo.memAvailable * 100) / memInfo.memTotal;
-    size_t swapFreePercent; = (memInfo.swapFree * 100) / memInfo.swapTotal;
+    size_t swapFreePercent;
     
     if (memInfo.swapTotal == 0) {
         swapFreePercent = 0;
