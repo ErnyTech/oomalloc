@@ -14,7 +14,7 @@ import oomalloc.oomcheck;
 bool start(size_t size) {
     import oomalloc.util : write;
 
-    debug {
+    static if (DEBUG) {
         write("Allocation size: ");
         write(size);
         write("\n");
@@ -28,7 +28,7 @@ bool start(size_t size) {
         }
 
         static if (OOM_KILLER_MODE == KillerMode.KILL_PREVENT_OOM) {
-            debug {
+            static if (DEBUG || PRINT_OOM_ERROR) {
                 write("OOM Killer mode: KILL_PREVENT_OOM\n");
                 write("Memory allocation will be suppressed\n");
                 write("\n");
@@ -38,7 +38,7 @@ bool start(size_t size) {
         }
 
         static if (OOM_KILLER_MODE == KillerMode.RETURNULL_PREVENT_OOM) {
-            debug {
+            static if (DEBUG || PRINT_OOM_ERROR) {
                 write("OOM Killer mode: RETURNULL_PREVENT_OOM\n");
                 write("Memory allocation will be suppressed\n");
                 write("\n");
@@ -48,7 +48,7 @@ bool start(size_t size) {
         }
     }
 
-    debug {
+    static if (DEBUG) {
         write("\n");
     }
 

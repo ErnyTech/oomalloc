@@ -21,7 +21,7 @@ bool checkOom(size_t sizeToAlloc) {
 
     immutable memInfo = getMemInfo();
 
-    debug {
+    static if (DEBUG) {
         write("Mem total: ");
         write(memInfo.memTotal);
         write("\n");
@@ -51,7 +51,7 @@ bool checkOom(size_t sizeToAlloc) {
         immutable newMemAvailable = memInfo.memAvailable - (sizeToAlloc / 1024);
         immutable isOom = (newMemAvailable <= minMem);
 
-        debug {
+        static if (DEBUG) {
             write("Min available: ");
             write(minMem);
             write("\n");
@@ -62,7 +62,7 @@ bool checkOom(size_t sizeToAlloc) {
         }
     }
 
-    debug {
+    static if (DEBUG || PRINT_OOM_ERROR) {
         if (isOom) {
             write("OOM detected!\n");
         }
